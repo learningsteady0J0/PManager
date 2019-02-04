@@ -12,7 +12,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
+extern int numOfData;
 
 #endif
 
