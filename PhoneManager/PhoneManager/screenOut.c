@@ -1,4 +1,4 @@
-/* Name : screenOut.c   ver 1.1
+/* Name : screenOut.c   ver 1.2
    content : 콘솔 출력을 위한 함수 정의
    Implementation : learningsteady0j0
 
@@ -35,6 +35,18 @@ void ShowPhoneInfo(phoneData phone)
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("┃ ● 이름 : %s \n", phone.name);
 	printf("┃ ● 전화번호 : %s \n", phone.phoneNum);
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
+}
+
+// 함	수 : void ShowPhoneInfoByPtr(phoneData * phone)
+// 기	능 : 포인터를 통한 이름과 전화번호 정보 출력
+// 반	환 : void
+
+void ShowPhoneInfoByPtr(phoneData * phone)
+{
+	printf("━━━━━━━━━━━━━━━━━━━━━━━━\n");
+	printf("┃ ● 이름 : %s \n", phone->name);
+	printf("┃ ● 전화번호 : %s \n", phone->phoneNum);
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
 }
 

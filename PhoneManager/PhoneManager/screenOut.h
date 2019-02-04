@@ -1,4 +1,4 @@
-/* Name : screenout.h  ver 1.0
+/* Name : screenout.h  ver 1.1
    content : 콘솔 출력을 위한 함수 선언
    Implementation : learningsteady0j0
 
@@ -13,6 +13,7 @@
 void ShowMenu(void);
 void ShowPhoneInfo(phoneData phone);
 void ReturnMenu(void);
+void ShowPhoneInfoByPtr(phoneData * phone);
 
 #endif
 

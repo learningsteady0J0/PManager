@@ -1,4 +1,4 @@
-/* Name : phoneFunc.c  ver 1.2
+/* Name : phoneFunc.c  ver 1.3
    content : 전화번호 컨트롤 함수
    Implementation : learningsteady0j0
 
@@ -12,7 +12,7 @@
 #define LIST_NUM 100
 
 int numOfData = 0;
-phoneData phoneList[LIST_NUM];
+phoneData * phoneList[LIST_NUM];
 
 // 함	수 : void InputPhoneData(void)
 // 기	능 : 전화번호 관련 데이터 입력 받아서 저장
@@ -21,6 +21,7 @@ phoneData phoneList[LIST_NUM];
 void InputPhoneData(void)
 {
 	phoneData data;
+	phoneData * p_List = (phoneData*)malloc(sizeof(phoneData));
 
 	if (numOfData > LIST_NUM)
 	{
@@ -33,7 +34,8 @@ void InputPhoneData(void)
 	fputs("전화번호 입력: ", stdout);
 	gets(data.phoneNum);
 	
-	phoneList[numOfData] = data;
+	*p_List = data;
+	phoneList[numOfData] = p_List;
 	numOfData++;
 
 	fputs("입력이 완료되었습니다, ", stdout);
@@ -51,7 +53,7 @@ void ShowAllData(void)
 
 	for (i = 0; i < numOfData; i++)
 	{
-		ShowPhoneInfo(phoneList[i]);
+		ShowPhoneInfoByPtr(phoneList[i]);
 	}
 
 	fputs("출력이 완료되었습니다, ", stdout);
@@ -71,9 +73,9 @@ void SearchPhoneData(void)
 
 	for (i = 0; i < numOfData; i++)
 	{
-		if (strcmp(name, phoneList[i].name) == 0)
+		if (strcmp(name, phoneList[i]->name) == 0)
 		{
-			ShowPhoneInfo(phoneList[i]);
+			ShowPhoneInfoByPtr(phoneList[i]);
 			ReturnMenu();
 			return;
 		}
@@ -95,12 +97,14 @@ void DeletePhoneData(void)
 	gets(name);
 	for (i = 0; i < numOfData; i++)
 	{
-		if (strcmp(name, phoneList[i].name) == 0)
+		if (strcmp(name, phoneList[i]->name) == 0)
 		{
-			for (j = i; j < numOfData; j++)
+			free(phoneList[i]);
+			for (j = i; j < numOfData-1; j++)
 			{
 				phoneList[j] = phoneList[j + 1];
 			}
+			
 			numOfData--;
 			fputs("데이터 삭제 완료,  ", stdout);
 			ReturnMenu();
