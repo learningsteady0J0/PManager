@@ -1,4 +1,4 @@
-/* Name : phoneFunc.c  ver 1.4
+/* Name : phoneFunc.c  ver 1.5
    content : 전화번호 컨트롤 함수
    Implementation : learningsteady0j0
 
@@ -21,7 +21,7 @@ phoneData * phoneList[LIST_NUM];
 void InputPhoneData(void)
 {
 	phoneData data;
-	phoneData * alocPhoneList = (phoneData*)malloc(sizeof(phoneData));
+	phoneData * allocPhoneList = (phoneData*)malloc(sizeof(phoneData));
 	int i;
 
 	if (numOfData > LIST_NUM)
@@ -40,14 +40,14 @@ void InputPhoneData(void)
 		if (!strcmp(data.name, phoneList[i]->name) && !strcmp(data.phoneNum, phoneList[i]->phoneNum))
 		{
 			fputs("이미 입력된 데이터 입니다,  ", stdout);
-			free(alocPhoneList);   // 구현할 때 까먹었음.. 꼭 기억할 것. 동적메모리할당할 때 항상 염두해둘것.
+			free(allocPhoneList);   // 구현할 때 까먹었음.. 꼭 기억할 것. 동적메모리할당할 때 항상 염두해둘것.
 			ReturnMenu();
 			return;
 		}
 	}
 
-	*alocPhoneList = data;
-	phoneList[numOfData] = alocPhoneList;
+	*allocPhoneList = data;
+	phoneList[numOfData] = allocPhoneList;
 	numOfData++;
 
 	fputs("입력이 완료되었습니다, ", stdout);
@@ -158,6 +158,67 @@ void DeletePhoneData(void)
 	fputs("데이터 삭제 완료,  ", stdout);
 	ReturnMenu();
 	return;
+}
+
+// 함	수 : void StoreDataToFile(void);
+// 기	능 : 데이터의 저장
+// 반	환 : void
+void StoreDataToFile(void) {
+	int i;
+	FILE * fp = fopen("PhoneManager.dat", "wt");
+
+	if (fp == NULL)
+	{
+		puts("파일열람실패");
+		return -1;
+	}
+	
+	fwrite(&numOfData, sizeof(int), 1, fp);
+
+	for (i = 0; i < numOfData; i++)
+	{
+
+		fprintf(fp, "%s\n%s\n", phoneList[i]->name, phoneList[i]->phoneNum);
+		free(phoneList[i]);
+	}
+
+	fclose(fp);
+	puts("파일복사 완료");
+}
+
+// 함	수 : void LoadDataFromFile(void);
+// 기	능 : 데이터 불러오기
+// 반	환 : void
+void LoadDataFromFile(void)
+{
+	int i , len;
+
+	FILE * fp = fopen("PhoneManager.dat", "rt");
+
+	if (fp == NULL)
+	{
+		puts("파일열람실패");
+		return -1;
+	}
+
+
+	fread(&numOfData, sizeof(int), 1, fp);
+	
+	for(i=0;i<numOfData;i++){
+		phoneList[i] = (phoneData*)malloc(sizeof(phoneData));
+		
+		fgets(phoneList[i]->name, NAME_LEN, fp);
+		len = strlen(phoneList[i]->name);
+		phoneList[i]->name[len - 1] = '\0';
+
+		fgets(phoneList[i]->phoneNum, NAME_LEN, fp);
+		len = strlen(phoneList[i]->phoneNum);
+		phoneList[i]->phoneNum[len - 1] = '\0';
+	}
+		
+	
+
+	fclose(fp);
 }
 
 /* end of file */

@@ -1,4 +1,4 @@
-/* Name : main.c  ver 1.1
+/* Name : main.c  ver 1.2
    content : main 함수
    Implementation : learningsteady0j0
 
@@ -19,6 +19,7 @@ int main(void)
 {
 	int inputMenu;
 
+	LoadDataFromFile();
 	while (1)
 	{	
 		inputMenu = 0; // 두번째로 메뉴호출시 a나 다른 문자를 입력해도 정수값이 바뀌지 않는 문제 해결방안.
@@ -46,6 +47,7 @@ int main(void)
 		if (inputMenu == QUIT)
 		{
 			puts("이용해 주셔서 감사합니다.");
+			StoreDataToFile();
 			break;
 		}
 	}
