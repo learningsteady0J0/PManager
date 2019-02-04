@@ -1,4 +1,4 @@
-/* Name : phoneFunc.h  ver 1.2
+/* Name : phoneFunc.h  ver 1.3
    content : 전화번호 컨트롤 함수들의 선언
    Implementation : learningsteady0j0
 
@@ -17,6 +17,7 @@ void SearchPhoneData(void);
 void DeletePhoneData(void);
 void StoreDataToFile(void);
 void LoadDataFromFile(void);
+void ChangePhoneData(void);
 
 #endif
 

@@ -1,4 +1,4 @@
-/* Name : phoneFunc.c  ver 1.5
+/* Name : phoneFunc.c  ver 1.6
    content : 전화번호 컨트롤 함수
    Implementation : learningsteady0j0
 
@@ -221,4 +221,58 @@ void LoadDataFromFile(void)
 	fclose(fp);
 }
 
+// 함	수 : void ChangePhoneData(void);
+// 기	능 : 번호 데이터의 변경
+// 반	환 : void
+
+void ChangePhoneData(void)
+{
+	char changeName[NAME_LEN];
+	char changeNumber[PHONE_LEN];
+	int idxOfMattchingData[LIST_NUM];
+	int changeIdx;
+	int count = 0;
+	int i, j, num;
+
+	fputs("변경 할 이름은? ", stdout);
+	gets(changeName);
+	for (i = 0; i < numOfData; i++)
+	{
+		if (!strcmp(changeName, phoneList[i]->name))
+		{
+			idxOfMattchingData[count++] = i;
+		}
+	}
+
+	if (count == 0)
+	{
+		fputs("데이터 정보가 없습니다,  ", stdout);
+		ReturnMenu();
+		return;
+	}
+	else if (count == 1)
+	{
+		changeIdx = idxOfMattchingData[0];
+	}
+	else if (count > 1)
+	{
+		for (i = 0; i < count; i++)
+		{
+			printf("NUM. %d\n", i + 1);
+			ShowPhoneInfoByPtr(phoneList[idxOfMattchingData[i]]);
+		}
+		fputs("선택: ", stdout);
+		scanf("%d", &num);
+		getchar();
+		changeIdx = idxOfMattchingData[num - 1];
+	}
+	
+	fputs("변경할 전화번호는? ", stdout);
+	fgets(changeNumber, sizeof(changeNumber), stdin);
+	strcpy(phoneList[changeIdx]->phoneNum, changeNumber);
+
+	fputs("전화번호 변경 완료,  ", stdout);
+	ReturnMenu();
+	return;
+}
 /* end of file */

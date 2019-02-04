@@ -1,4 +1,4 @@
-/* Name : main.c  ver 1.2
+/* Name : main.c  ver 1.3
    content : main 함수
    Implementation : learningsteady0j0
 
@@ -9,7 +9,7 @@
 #include "screenOut.h"
 #include "phoneFunc.h"
 
-enum { INPUT = 1, SHOWALL,SEARCH,DELETE, QUIT };
+enum { INPUT = 1, SHOWALL, SEARCH, DELETE, CHANGE, QUIT };
 
 // 함	수 : int main (void)
 // 기	능 : 사용자 선택 처리
@@ -42,8 +42,11 @@ int main(void)
 		case DELETE:
 			DeletePhoneData();
 			break;
-		}
 
+		case CHANGE:
+			ChangePhoneData();
+			break;
+		}
 		if (inputMenu == QUIT)
 		{
 			puts("이용해 주셔서 감사합니다.");
