@@ -1,4 +1,4 @@
-/* Name : phoneFunc.c  ver 1.6
+/* Name : phoneFunc.c  ver 1.7
    content : 전화번호 컨트롤 함수
    Implementation : learningsteady0j0
 
@@ -14,10 +14,64 @@
 int numOfData = 0;
 phoneData * phoneList[LIST_NUM];
 
+// 함	수 : void StoreDataToFileInStruct(void)
+// 기	능 : 바이너리형식으로 저장
+// 반	환 : void
+void StoreDataToFileInStruct(void)
+{
+	FILE * fp = fopen("PhoneManager.dat", "wb");
+	int i;
+
+	if (fp == NULL)
+	{
+		puts("파일 열람 실패");
+		return -1;
+	}
+
+	fwrite(&numOfData, sizeof(int), 1, fp);
+
+	for (i = 0; i < numOfData; i++)
+	{
+		fwrite(phoneList[i], sizeof(phoneData), 1, fp);
+	}
+	
+	puts("저장완료");
+	fclose(fp);
+	
+}
+
+// 함	수 : void LoadDataFromFileInStruct(void)
+// 기	능 : 바이너리형식으로 불러오기
+// 반	환 : void
+void LoadDataFromFileInStruct(void)
+{
+	FILE * fp = fopen("PhoneManager.dat", "rb");
+	int i;
+
+	if (fp == NULL)
+	{
+		puts("파일 열람 실패");
+		return -1;
+	}
+	
+	fread(&numOfData, sizeof(int), 1, fp);
+
+	for (i = 0; i < numOfData; i++)
+	{
+		phoneList[i] = (phoneData*)malloc(sizeof(phoneData));
+		fread(phoneList[i], sizeof(phoneData), 1, fp);
+	}
+
+	
+
+
+	fclose(fp);
+
+}
+
 // 함	수 : void InputPhoneData(void)
 // 기	능 : 전화번호 관련 데이터 입력 받아서 저장
 // 반	환 : void
-
 void InputPhoneData(void)
 {
 	phoneData data;
@@ -49,7 +103,7 @@ void InputPhoneData(void)
 	*allocPhoneList = data;
 	phoneList[numOfData] = allocPhoneList;
 	numOfData++;
-
+	StoreDataToFileInStruct();
 	fputs("입력이 완료되었습니다, ", stdout);
 	ReturnMenu();
 }
@@ -155,7 +209,65 @@ void DeletePhoneData(void)
 	}
 
 	numOfData--;
+	StoreDataToFileInStruct();
 	fputs("데이터 삭제 완료,  ", stdout);
+	ReturnMenu();
+	return;
+}
+
+// 함	수 : void ChangePhoneData(void);
+// 기	능 : 번호 데이터의 변경
+// 반	환 : void
+
+void ChangePhoneData(void)
+{
+	char changeName[NAME_LEN];
+	char changeNumber[PHONE_LEN];
+	int idxOfMattchingData[LIST_NUM];
+	int changeIdx;
+	int count = 0;
+	int i, j, num;
+
+	fputs("변경 할 이름은? ", stdout);
+	gets(changeName);
+	for (i = 0; i < numOfData; i++)
+	{
+		if (!strcmp(changeName, phoneList[i]->name))
+		{
+			idxOfMattchingData[count++] = i;
+		}
+	}
+
+	if (count == 0)
+	{
+		fputs("데이터 정보가 없습니다,  ", stdout);
+		ReturnMenu();
+		return;
+	}
+	else if (count == 1)
+	{
+		changeIdx = idxOfMattchingData[0];
+	}
+	else if (count > 1)
+	{
+		for (i = 0; i < count; i++)
+		{
+			printf("NUM. %d\n", i + 1);
+			ShowPhoneInfoByPtr(phoneList[idxOfMattchingData[i]]);
+		}
+		fputs("선택: ", stdout);
+		scanf("%d", &num);
+		getchar();
+		changeIdx = idxOfMattchingData[num - 1];
+	}
+
+	fputs("변경할 전화번호는? ", stdout);
+	fgets(changeNumber, sizeof(changeNumber), stdin);
+	strcpy(phoneList[changeIdx]->phoneNum, changeNumber);
+
+	StoreDataToFileInStruct();
+
+	fputs("전화번호 변경 완료,  ", stdout);
 	ReturnMenu();
 	return;
 }
@@ -221,58 +333,4 @@ void LoadDataFromFile(void)
 	fclose(fp);
 }
 
-// 함	수 : void ChangePhoneData(void);
-// 기	능 : 번호 데이터의 변경
-// 반	환 : void
-
-void ChangePhoneData(void)
-{
-	char changeName[NAME_LEN];
-	char changeNumber[PHONE_LEN];
-	int idxOfMattchingData[LIST_NUM];
-	int changeIdx;
-	int count = 0;
-	int i, j, num;
-
-	fputs("변경 할 이름은? ", stdout);
-	gets(changeName);
-	for (i = 0; i < numOfData; i++)
-	{
-		if (!strcmp(changeName, phoneList[i]->name))
-		{
-			idxOfMattchingData[count++] = i;
-		}
-	}
-
-	if (count == 0)
-	{
-		fputs("데이터 정보가 없습니다,  ", stdout);
-		ReturnMenu();
-		return;
-	}
-	else if (count == 1)
-	{
-		changeIdx = idxOfMattchingData[0];
-	}
-	else if (count > 1)
-	{
-		for (i = 0; i < count; i++)
-		{
-			printf("NUM. %d\n", i + 1);
-			ShowPhoneInfoByPtr(phoneList[idxOfMattchingData[i]]);
-		}
-		fputs("선택: ", stdout);
-		scanf("%d", &num);
-		getchar();
-		changeIdx = idxOfMattchingData[num - 1];
-	}
-	
-	fputs("변경할 전화번호는? ", stdout);
-	fgets(changeNumber, sizeof(changeNumber), stdin);
-	strcpy(phoneList[changeIdx]->phoneNum, changeNumber);
-
-	fputs("전화번호 변경 완료,  ", stdout);
-	ReturnMenu();
-	return;
-}
 /* end of file */
