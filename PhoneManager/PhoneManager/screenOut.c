@@ -1,4 +1,4 @@
-/* Name : screenOut.c   ver 1.0
+/* Name : screenOut.c   ver 1.1
    content : 콘솔 출력을 위한 함수 정의
    Implementation : learningsteady0j0
 
@@ -19,7 +19,9 @@ void ShowMenu(void)
 	printf("━━━━━━━━━ 메뉴 ━━━━━━━━━\n");
 	printf(" 1. 전화번호 입력 \n");
 	printf(" 2. 전체 정보 출력 \n");
-	printf(" 3. 종료 \n");
+	printf(" 3. 전화번호 검색 \n");
+	printf(" 4. 전화번호 삭제 \n");
+	printf(" 5. 종료 \n");
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━\n");
 	printf("선택>> ");
 }
@@ -36,4 +38,10 @@ void ShowPhoneInfo(phoneData phone)
 	printf("━━━━━━━━━━━━━━━━━━━━━━━━\n\n");
 }
 
+void ReturnMenu(void)
+{
+
+	puts("메뉴로 돌아가려면 아무 키를 입력해주세요...");
+	getchar();  // 아무 키 입력
+}
 /* end of file */

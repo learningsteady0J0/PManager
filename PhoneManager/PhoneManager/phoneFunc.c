@@ -1,4 +1,4 @@
-/* Name : phoneFunc.c  ver 1.1
+/* Name : phoneFunc.c  ver 1.2
    content : 전화번호 컨트롤 함수
    Implementation : learningsteady0j0
 
@@ -29,20 +29,15 @@ void InputPhoneData(void)
 	}
 
 	fputs("이름 입력: ", stdout);
-	scanf("%s", data.name);
+	gets(data.name);
 	fputs("전화번호 입력: ", stdout);
-	scanf("%s", data.phoneNum);
-	getchar();
-
-
+	gets(data.phoneNum);
+	
 	phoneList[numOfData] = data;
 	numOfData++;
 
-	puts("입력이 완료되었습니다, 메뉴로 돌아가려면 아무 키를 입력해주세요.");
-	fgets(data.name, sizeof(data.name), stdin);  // 아무 키 입력
-	
-	
-
+	fputs("입력이 완료되었습니다, ", stdout);
+	ReturnMenu();
 }
 
 // 함	수 : void ShowAllData(void)
@@ -59,9 +54,62 @@ void ShowAllData(void)
 		ShowPhoneInfo(phoneList[i]);
 	}
 
-	puts("출력이 완료되었습니다, 메뉴로 돌아가려면 아무 키를 입력해주세요.");
-	fgets(str, sizeof(str), stdin);  // 아무 키 입력
-	
+	fputs("출력이 완료되었습니다, ", stdout);
+	ReturnMenu();
+}
+
+// 함	수 : void SearchPhoneData(void)
+// 기	능 : 이름을 통한 데이터 검색
+// 반	환 : void
+void SearchPhoneData(void)
+{
+	char name[NAME_LEN];
+	int i;
+
+	fputs("찾는 이름은? ",stdout);
+	gets(name);
+
+	for (i = 0; i < numOfData; i++)
+	{
+		if (strcmp(name, phoneList[i].name) == 0)
+		{
+			ShowPhoneInfo(phoneList[i]);
+			ReturnMenu();
+			return;
+		}
+	}
+
+	fputs("데이터 정보가 없습니다,  ",stdout);
+	ReturnMenu();
+}
+
+// 함	수 : void DeletePhoneData(void)
+// 기	능 : 이름을 참조하여 데이터 삭제
+// 반	환 : void
+void DeletePhoneData(void)
+{
+	char name[NAME_LEN];
+	int i,j;
+
+	fputs("찾는 이름은? ", stdout);
+	gets(name);
+	for (i = 0; i < numOfData; i++)
+	{
+		if (strcmp(name, phoneList[i].name) == 0)
+		{
+			for (j = i; j < numOfData; j++)
+			{
+				phoneList[j] = phoneList[j + 1];
+			}
+			numOfData--;
+			fputs("데이터 삭제 완료,  ", stdout);
+			ReturnMenu();
+			return;
+		}
+	}
+
+	fputs("데이터 정보가 없습니다,  ", stdout);
+	ReturnMenu();
 }
 
 /* end of file */

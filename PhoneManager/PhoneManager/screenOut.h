@@ -12,6 +12,7 @@
 
 void ShowMenu(void);
 void ShowPhoneInfo(phoneData phone);
+void ReturnMenu(void);
 
 #endif
 
